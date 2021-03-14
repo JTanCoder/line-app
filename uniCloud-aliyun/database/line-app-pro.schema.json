@@ -1,0 +1,172 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"clientPhone":{
+			"title":"客户电话",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"clientPhone"
+		},
+		"clientName":{
+			"title":"专线名称",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"clientName"
+		},
+		"clientAddr":{
+			"title":"客户地址",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"clientAddr"
+		},
+		"contractNumber":{
+			"title":"合同编号",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"contractNumber"
+		},
+		"implementId":{
+			"title":"施工队",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"implementId",
+			"foreignKey": "line-app-user._id" // 使用foreignKey表示，此字段关联line-app-user表的_id。
+		},
+		"status":{
+			"title":"项目状态",
+			"bsonType": "int",
+			"description": "项目状态：0 新建 1 合同签订 2 设计院勘察 3 方案审批 4 施工中 5 施工完成-结束",
+			"label": "项目状态",
+			"enum": [{
+				"text": "新建",
+				"value": 0
+			}, {
+				"text": "合同签订",
+				"value": 1
+			}, {
+				"text": "设计院勘察",
+				"value": 2
+			}, {
+				"text": "方案审批",
+				"value": 3
+			}, {
+				"text": "施工中",
+				"value": 4
+			}, {
+				"text": "项目完成",
+				"value": 5
+			}],
+		  "errorMessage": "{label}无效"
+		},
+		"creator":{
+			"title":"创建人",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"creator",
+			"foreignKey": "line-app-user.loginName" // 使用foreignKey表示，此字段关联line-app-user表的loginName。
+		},
+		"createTime":{
+			"title":"创建时间",
+			"bsonType":"timestamp",
+			"trim":"both",
+			"defaultValue": {
+				"$env": "now"
+			}
+		},
+		"contractList":{
+			"title":"合同附件",
+			"bsonType":"array",
+			"trim":"both",
+			"format":"contractList"
+		},
+		"proInfo":{
+			"title":"项目信息",
+			"bsonType":"object",
+			"trim":"both",
+			"format":"proInfo",
+			"properties": {
+				"contractInfo": {
+				  "bsonType": "object",
+				  "properties":{
+					  "remark": {
+					    "bsonType": "string"
+					  },
+					  "fileList":{
+						  "bsonType":"array"
+					  }
+				  }
+				},
+				"designInfo": {
+				  "bsonType": "object",
+				  "properties":{
+					  "remark": {
+						"bsonType": "string"
+					  },
+					  "fileList":{
+						  "bsonType":"array"
+					  }
+				  }
+				},
+				"programlInfo": {
+				  "bsonType": "object",
+				  "properties":{
+					  "remark": {
+						"bsonType": "string"
+					  },
+					  "fileList":{
+						  "bsonType":"array"
+					  }
+				  }
+				},
+				"teamInfo": {
+				  "bsonType": "object",
+				  "properties":{
+					  "remark": {
+						"bsonType": "string"
+					  },
+					  "fileList":{
+						  "bsonType":"array"
+					  }
+				  }
+				}
+			}
+			
+		},
+		"constrInfo":{
+			"title":"施工信息",
+			"bsonType":"array",
+			"trim":"both",
+			"format":"constrInfo"
+		},
+		"appraisalInfo":{
+			"title":"评价信息",
+			"bsonType":"object",
+			"trim":"both",
+			"properties": {
+				"remark": {
+				  "bsonType": "string"
+				},
+				"level": {
+				  "bsonType": "string"
+				}
+			}
+		},
+		"complaintInfo":{
+			"title":"客户评价",
+			"bsonType":"object",
+			"trim":"both",
+			"format":"complaintInfo"
+		}
+	}
+}

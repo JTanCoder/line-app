@@ -1,0 +1,228 @@
+.text-fuled,
+.line-fuled,
+.lines-fuled {
+	color: #58b7e9;
+}
+
+.text-666,
+.line-666,
+.lines-666 {
+	color: #666666;
+}
+
+.text-999,
+.line-999,
+.lines-999 {
+	color: #999999;
+}
+
+/* 文字截断 */
+.fuled .text-cut {
+    width:calc(100% - 180upx) !important;
+    text-align: right;
+}
+
+
+/* 图标 */
+.fuled .cu-bar.arrow {
+	padding-right: 40upx
+}
+
+.fuled .cu-bar.arrow:before {
+	position: absolute;
+	top: 0;
+	right: 30upx;
+	bottom: 0;
+	display: block;
+	margin: auto;
+	width: 30upx;
+	height: 30upx;
+	color: #999999;
+	content: "\e6a3";
+	text-align: center;
+	font-size: 34upx;
+	font-family: cuIcon;
+	line-height: 30upx
+}
+
+.cu-list.menu>.cu-item.cross {
+	padding-right: 90upx
+}
+
+.cu-list.menu>.cu-item.cross:before {
+	position: absolute;
+	top: 0;
+	right: 30upx;
+	bottom: 0;
+	display: block;
+	margin: auto;
+	width: 30upx;
+	height: 30upx;
+	color: #8799a3;
+	content: "\e6da";
+	text-align: center;
+	font-size: 34upx;
+	font-family: cuIcon;
+	line-height: 30upx
+}
+
+/* 表单 */
+.fuled-form-group {
+	background-color: #ffffff;
+	padding: 1upx 30upx;
+	display: flex;
+	align-items: center;
+	min-height: 100upx;
+	justify-content: space-between;
+}
+
+.fuled-form-group+.fuled-form-group {
+	border-top: 1upx solid #eee;
+}
+
+.fuled-form-group .title {
+	text-align: justify;
+	padding-right: 30upx;
+	font-size: 30upx;
+	position: relative;
+	height: 40upx;
+	line-height: 40upx;
+    color: #333333;
+}
+
+.fuled-form-group .multi-row {
+	max-width:calc(100% - 180upx) !important;
+	white-space: pre-line !important;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.fuled-form-group picker{
+    padding-right: 30upx;
+}
+
+.fuled-form-def-group {
+	background-color: #ffffff;
+	padding: 1upx 30upx;
+	display: flex;
+	align-items: center;
+	min-height: 100upx;
+	justify-content: space-between;
+}
+
+.fuled-form-def-group+.fuled-form-def-group {
+	border-top: 1upx solid #eee;
+}
+
+.fuled-form-def-group .title {
+	text-align: justify;
+	padding-right: 30upx;
+	font-size: 24upx;
+	position: relative;
+	height: 40upx;
+	line-height: 40upx;
+    color: #999999;
+}
+
+.fuled-form-def-group input {
+	flex: 1;
+	font-size: 30upx;
+	color: #555;
+	padding-right: 20upx;
+    width: 100%;
+    padding-bottom: 10upx;
+}
+
+.fuled>.cu-form-group textarea{
+    text-align: right;
+}
+.fuled>.cu-form-group input{
+    text-align: right;
+}
+
+.fuled>.autoWidth button{
+    border-radius: 0px;
+}
+    
+/* 手机顶部状态栏 */
+.cu-custom.fixed {
+    position: fixed;
+    z-index: 99;
+}
+
+
+/* 底部tabbar高度 */
+.fuled-tabbar-height {
+	min-height: 30upx;
+	height: calc(100upx + env(safe-area-inset-bottom) / 2 -70);
+}
+    
+/* ==================
+          换行
+ ==================== */
+.multi-row {
+    max-width:calc(100%) !important;
+    white-space: pre-line !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+/* ==================
+          文本
+ ==================== */
+.text-content-fuled {
+	line-height: 1.6;
+}
+.text-fuled,
+.line-fuled,
+.lines-fuled {
+	color: #58b7e9;
+}
+
+
+/* ==================
+         背景色
+ ==================== */
+.bg-fuled {
+ 	background-color: #58b7e9;
+  	color: #ffffff;
+}
+
+.bg-speech {
+ 	background-color: #0056B3;
+  	color: #ffffff;
+}
+
+
+/* ==================
+         背景渐变色
+ ==================== */
+.bg-fuled-gradual {
+ 	background-image: linear-gradient(45deg, #d484b5, #58b7e9);
+  	color: #ffffff;
+}
+ 
+
+/* ==================
+         卡片
+ ==================== */
+.cu-card.article>.cu-item .title-fuled {
+	font-size: 30upx;
+	font-weight: 900;
+	color: #333333;
+	line-height: 50upx;
+	padding: 0 0upx;
+}
+
+.cu-card.dynamic>.cu-item>.text-content-fuled {
+	padding: 0 30upx 0;
+	max-height: 3.4em;
+	overflow: hidden;
+	font-size: 30upx;
+	margin-bottom: 20upx;
+}
+.cu-card.article>.cu-item .content .text-content-fuled {
+	font-size: 28upx;
+	color: #888;
+	height: 3em;
+	overflow: hidden;
+}

@@ -1,0 +1,549 @@
+<template>
+	<view class="page" style="background-color: #0056B3;">
+		<!-- #ifdef APP-PLUS -->
+			<!-- 导航栏 -->
+			<free-nav-bar> </free-nav-bar>
+		<!-- #endif -->
+		<view class="uni-bar-body">
+			<uni-nav-bar :fixed="false" :border="false" backgroundColor="#0056B3" left-icon="arrowleft" color="#fff" left-text="返回" :title="title" @clickLeft="close" background-color="#FFFFFF" >
+				<!-- <view class="input-view">
+					<uni-icons class="input-uni-icon" type="search" size="22" color="#666666" />
+					<input confirm-type="search" class="nav-bar-input" type="text" placeholder="输入搜索关键词" @confirm="confirm">
+				</view> -->
+			</uni-nav-bar>
+		</view>
+		<uni-swiper-dot :info="info" :current="current" :mode="mode" :dots-styles="dotsStyles" field="content">
+			<swiper class="swiper-box" :style="getHeight" @change="change">
+				<swiper-item>
+					<manuscript-title></manuscript-title>
+				</swiper-item>
+				<swiper-item >
+					<uni-card :is-shadow="true" title="uniapp" mode="title" thumbnail="https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg" extra="DCloud 2019-05-20 12:32:19" note="true" @click="clickCard">
+						<text class="content-box-text">
+							WebSocket是一种在单个TCP连接上进行全双工通信的协议。WebSocket通信协议于2011年被IETF定为标准RFC 6455，并由RFC7936补充规范
+						</text>
+						<block slot="footer">
+							<view class="footer-box">
+								<view class="" @click.stop="footerClick('编辑')"><text class="footer-box__item"> 编辑</text></view>
+							</view>
+						</block>
+					</uni-card>
+				</swiper-item>
+				<swiper-item >
+					<uni-card :is-shadow="true" title="uniapp" mode="title" thumbnail="https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg" extra="DCloud 2019-05-20 12:32:19" note="true" @click="clickCard">
+						<text class="content-box-text">
+							WebSocket是一种在单个TCP连接上进行全双工通信的协议。WebSocket通信协议于2011年被IETF定为标准RFC 6455，并由RFC7936补充规范
+						</text>
+						<block slot="footer">
+							<view class="footer-box">
+								<view class="" @click.stop="footerClick('编辑')"><text class="footer-box__item"> 编辑</text></view>
+							</view>
+						</block>
+					</uni-card>
+				</swiper-item>
+			</swiper>
+		</uni-swiper-dot>
+		
+		<view>
+			<manuscript-fab ref="fab" :pattern="pattern" :content="content" horizontal="right" vertical="top" direction="vertical" @trigger="trigger" />
+		</view>
+		
+		<uni-popup ref="showshare" type="bottom" @change="popupChange">
+			<view class="uni-share">
+				<view class="uni-share-content">
+					<uni-list>
+						<uni-list-item :show-arrow="false" title="标题" @click="onClickType(1)" :border="false" />
+						<uni-list-item :show-arrow="false" title="目录" @click="onClickType(2)" :border="false" />
+						<uni-list-item :show-arrow="false" title="主题" @click="onClickType(3)" :border="false" />
+						<uni-list-item :show-arrow="false" title="正文" @click="onClickType(4)" :border="false" />
+					</uni-list>
+				</view>
+			</view>
+		</uni-popup>
+		
+		<uni-popup ref="showcatalog" type="bottom" @change="popupChange">
+			<view class="uni-share">
+				<text class="uni-share-title">新增目录</text>
+				<view class="uni-share-content">
+					<view class="px-3">
+						<m-input type="text" class="bg-light px-3 mb-3 font" placeholder="请输入目录1名称" style="height: 80rpx;width: 95%;" v-model="speechForm.titleName"></m-input>
+						<m-input type="text" class="bg-light px-3 mb-3 font" placeholder="请输入目录2名称" style="height: 80rpx;width: 95%;" v-model="speechForm.titleName"></m-input>
+						<m-input type="text" class="bg-light px-3 mb-3 font" placeholder="请输入目录3名称" style="height: 80rpx;width: 95%;" v-model="speechForm.titleName"></m-input>
+					</view>
+				</view>
+				
+				<view class="uni-tip-group-button">
+					<text class="uni-tip-button" @click="cancel('catalog')">取消</text>
+					<text class="uni-tip-button" @click="save('catalog')">确定</text>
+				</view>
+			</view>
+		</uni-popup>
+		
+		<uni-popup ref="showpro" type="bottom" @change="popupChange">
+			<view class="uni-share">
+				<text class="uni-share-title">新增项目</text>
+				<view class="uni-share-content">
+					<view class="px-3">
+						<m-input type="text" class="bg-light px-3 mb-3 font" placeholder="请输入项目1名称" style="height: 80rpx;width: 95%;" v-model="speechForm.titleName"></m-input>
+						<m-input type="text" class="bg-light px-3 mb-3 font" placeholder="请输入项目2名称" style="height: 80rpx;width: 95%;" v-model="speechForm.titleName"></m-input>
+					</view>
+				</view>
+				
+				<view class="uni-tip-group-button">
+					<text class="uni-tip-button" @click="cancel('pro')">取消</text>
+					<text class="uni-tip-button" @click="save('pro')">确定</text>
+				</view>
+			</view>
+		</uni-popup>
+		
+		<uni-popup ref="showcontent" type="bottom" @change="popupChange">
+			<view class="uni-share">
+				<text class="uni-share-title">新增正文</text>
+				<view class="uni-share-content">
+					<view class="px-3">
+						<m-input type="text" class="bg-light px-3 mb-3 font" placeholder="请输入正文1名称" style="height: 80rpx;width: 95%;" v-model="speechForm.titleName"></m-input>
+						<m-input type="text" class="bg-light px-3 mb-3 font" placeholder="请输入正文1描述" style="height: 80rpx;width: 95%;" v-model="speechForm.titleName"></m-input>
+						<m-input type="text" class="bg-light px-3 mb-3 font" placeholder="请添加正文1语音解说" style="height: 80rpx;width: 95%;" v-model="speechForm.titleName"></m-input>
+						<m-input type="text" class="bg-light px-3 mb-3 font" placeholder="请输入正文2名称" style="height: 80rpx;width: 95%;" v-model="speechForm.titleName"></m-input>
+						<m-input type="text" class="bg-light px-3 mb-3 font" placeholder="请输入正文2描述" style="height: 80rpx;width: 95%;" v-model="speechForm.titleName"></m-input>
+						<m-input type="text" class="bg-light px-3 mb-3 font" placeholder="请添加正文2语音解说" style="height: 80rpx;width: 95%;" v-model="speechForm.titleName"></m-input>
+					</view>
+				</view>
+				
+				<view class="uni-tip-group-button">
+					<text class="uni-tip-button" @click="cancel('content')">取消</text>
+					<text class="uni-tip-button" @click="save('content')">确定</text>
+				</view>
+			</view>
+		</uni-popup>
+		
+		
+	</view>
+</template>
+
+<script>
+	import freeNavBar from "@/components/free-ui/free-nav-bar.vue"
+	import mInput from '../../components/m-input.vue';
+	import uniCard from '@/components/uni/uni-card/uni-card.vue'
+	import manuscriptFab from '@/components/fuled/fuled-manuscript-fab.vue'
+	import uniSwiperDot from '@/components/uni/uni-swiper-dot/uni-swiper-dot.vue'
+	import uniNavBar from '@/components/uni/uni-nav-bar/uni-nav-bar.vue'
+	import uniIcons from '@/components/uni/uni-icons/uni-icons.vue'
+	import uniPopup from '@/components/uni/uni-popup/uni-popup.vue'
+	import uniNumberBox from '@/components/uni/uni-number-box/uni-number-box.vue'
+	import manuscriptViewTitle from '@/components/fuled/fuled-manuscript-view-title.vue'
+	import uniListItem from '@/components/uni/uni-list-item/uni-list-item.vue'
+	import uniList from '@/components/uni/uni-list/uni-list.vue'
+	const {windowHeight} = uni.getSystemInfoSync();
+	export default {
+		props: {
+			// 是否开启下边线
+			title:'',
+		},
+		components: {
+			uniSwiperDot,
+			"manuscript-fab":manuscriptFab,
+			uniCard,
+			uniNavBar,
+			uniIcons,
+			uniPopup,
+			mInput,
+			uniNumberBox,
+			freeNavBar,
+			uniListItem,
+			uniList,
+			"manuscript-title":manuscriptViewTitle
+		},
+		data() {
+			return {
+				speechForm: {
+					titleName: '',
+					subtitleName: '',
+					keyword: '',
+					speechDuration: 30
+				},
+				info: [{
+						colorClass: 'uni-bg-red',
+						url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg',
+						content: '主题'
+					},
+					{
+						colorClass: 'uni-bg-green',
+						url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/muwu.jpg',
+						content: '目录'
+					},
+					{
+						colorClass: 'uni-bg-blue',
+						url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg',
+						content: '项目'
+					}
+				],
+				modeIndex: -1,
+				styleIndex: -1,
+				current: 0,
+				mode: 'dot',
+				dotsStyles: {},
+				windowHeight,
+				pattern: {
+					color: '#7A7E83',
+					backgroundColor: '',
+					selectedColor: '#007AFF',
+					buttonColor: '#007AFF'
+				},
+				content: [{
+						active: false,
+						iconPath:"/static/fuled/add.png"
+					},
+					{
+						iconPath:"/static/fuled/edit.png",
+						active: false
+					},
+					{
+						iconPath:"/static/fuled/pro.png",
+						active: false
+					},
+					{
+						iconPath:"/static/fuled/left.png",
+						active: false
+					},
+					{
+						iconPath:"/static/fuled/right.png",
+						active: false
+					}
+				],
+				draftChapter:[
+					{}
+				]
+			}
+		},
+		computed: {
+			getHeight() {
+				// #ifdef APP-PLUS
+				return `height: 88vh; width: 100vw;`
+				// #endif
+				// #ifndef APP-PLUS
+				return `height: 93vh; width: 100vw;`
+				// #endif
+			}
+		},
+		onLoad() {},
+		methods: {
+			change(e) {
+				this.current = e.detail.current
+			},
+			trigger(e) {
+				console.log(e)
+				this.content[e.index].active = !e.item.active
+				if(e.index == 0){
+					this.$nextTick(() => {
+						this.$refs['showshare'].open()
+					})	
+				}
+			},
+			onClickType(index){
+				if(index == 1){
+					this.$nextTick(() => {
+						this.$refs['showshare'].open()
+					})	
+				}else if(index == 2){
+					this.$nextTick(() => {
+						this.$refs['showcatalog'].open()
+					})	
+				}else if(index == 3){
+					this.$nextTick(() => {
+						this.$refs['showpro'].open()
+					})	
+				}else if(index == 4){
+					this.$nextTick(() => {
+						this.$refs['showcontent'].open()
+					})	
+				}
+				this.$refs['showshare'].close()
+			},
+			close(){
+				this.$emit('closeDrawer')
+			},
+			clickCard() {
+				uni.showToast({
+					title: '点击卡片',
+					icon: 'none'
+				})
+			},
+			popupChange(e) {
+				console.log('是否打开:' + e.show)
+			},
+			cancel(type) {
+				this.$refs['show' + type].close()
+			},
+			onBackPress() {
+				this.$refs['showshare'].close()
+				this.$refs['showcatalog'].close()
+				this.$refs['showpro'].close()
+				this.$refs['showcontent'].close()
+			},
+			speechDurationBoxchange(value) {
+				this.speechForm.speechDuration = value
+			},
+			save(type){
+				uni.showToast({
+					title:"保存:"+type+" 的信息"
+				})
+			}
+				
+		}
+	}
+</script>
+
+<style>
+
+	/* #ifndef APP-NVUE */
+	page {
+		display: flex;
+		flex-direction: column;
+		box-sizing: border-box;
+		background-color: #efeff4;
+		min-height: 100%;
+		height: auto;
+	}
+
+	view {
+		font-size: 14px;
+		line-height: inherit;
+	}
+
+	.example {
+		padding: 0 15px 15px;
+	}
+
+	.example-info {
+		padding: 15px;
+		color: #3b4144;
+		background: #ffffff;
+	}
+
+	.example-body {
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		padding: 0;
+		font-size: 14px;
+		background-color: #ffffff;
+	}
+
+	/* #endif */
+	.example {
+		padding: 0 15px;
+	}
+
+	.example-info {
+		/* #ifndef APP-NVUE */
+		display: block;
+		/* #endif */
+		padding: 15px;
+		color: #3b4144;
+		background-color: #ffffff;
+		font-size: 14px;
+		line-height: 20px;
+	}
+
+	.example-info-text {
+		font-size: 14px;
+		line-height: 20px;
+		color: #3b4144;
+	}
+
+
+	.example-body {
+		flex-direction: column;
+		padding: 15px;
+		background-color: #ffffff;
+	}
+
+	.word-btn-white {
+		font-size: 18px;
+		color: #FFFFFF;
+	}
+
+	.word-btn {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		border-radius: 6px;
+		height: 48px;
+		margin: 15px;
+		background-color: #007AFF;
+	}
+
+	.word-btn--hover {
+		background-color: #4ca2ff;
+	}
+
+
+	.swiper-box {
+		/* height: 620px; */
+	}
+
+	.swiper-item {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		background-color: #999;
+		color: #fff;
+		height: 600px;
+	}
+
+	.image {
+		width: 750rpx;
+	}
+
+	.uni-bg-red {
+		background-color: #ff5a5f;
+	}
+
+	.uni-bg-green {
+		background-color: #09bb07;
+	}
+
+	.uni-bg-blue {
+		background-color: #007aff;
+	}
+
+	.example-body {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: row;
+		padding: 20rpx;
+	}
+
+	.example-body-item {
+
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		margin: 15rpx;
+		padding: 15rpx;
+		height: 60rpx;
+		/* #ifndef APP-NVUE */
+		display: flex;
+		padding: 0 15rpx;
+		/* #endif */
+		flex: 1;
+		border-color: #e5e5e5;
+		border-style: solid;
+		border-width: 1px;
+		border-radius: 5px;
+	}
+
+	.example-body-item-text {
+		font-size: 28rpx;
+		color: #333;
+	}
+
+	.example-body-dots {
+		width: 16rpx;
+		height: 16rpx;
+		border-radius: 50px;
+		background-color: #333333;
+		margin-left: 10rpx;
+	}
+
+	.active {
+		border-style: solid;
+		border-color: #007aff;
+		border-width: 1px;
+	}
+	
+	/* 底部分享 */
+	.uni-share {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		flex-direction: column;
+		/* #endif */
+		background-color: #fff;
+	}
+	
+	.uni-share-title {
+		line-height: 60rpx;
+		font-size: 24rpx;
+		padding: 15rpx 0;
+		text-align: center;
+	}
+	
+	.uni-share-content {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		padding: 15px;
+	}
+	
+	.uni-share-content-box {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: column;
+		align-items: center;
+		width: 200rpx;
+	}
+	
+	.uni-share-content-image {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		width: 60rpx;
+		height: 60rpx;
+		overflow: hidden;
+		border-radius: 10rpx;
+	}
+	
+	.content-image {
+		width: 60rpx;
+		height: 60rpx;
+	}
+	
+	.uni-share-content-text {
+		font-size: 26rpx;
+		color: #333;
+		padding-top: 5px;
+		padding-bottom: 10px;
+	}
+	
+	.uni-share-btn {
+		height: 90rpx;
+		line-height: 90rpx;
+		font-size: 14px;
+		border-top-color: #f5f5f5;
+		border-top-width: 1px;
+		border-top-style: solid;
+		text-align: center;
+		color: #666;
+	}
+	
+	.uni-tip-group-button {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: row;
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+	.uni-tip-button {
+		flex: 1;
+		text-align: center;
+		font-size: 14px;
+		color: #3b4144;
+	}
+	
+</style>

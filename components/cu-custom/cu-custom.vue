@@ -1,0 +1,91 @@
+<template>
+	<view>
+		<view class="cu-custom" :style="[{height:CustomBar + 'px'}]">
+			<view class="cu-bar fixed" :style="style" :class="[bgImage!=''?'none-bg text-white bg-img':'',bgColor]">
+                <view v-if="isBack" @tap="onBackClick" class="action" >
+					<text class="cuIcon-back"></text>
+					<slot name="backText"></slot>
+				</view>
+				<view class="content" :style="[{top:StatusBar + 'px'}]">
+					<slot name="content"></slot>
+				</view>
+                <!-- #ifdef APP-PLUS -->
+				<view v-if="isDef" @tap="onDefClick" style="padding-right: 10px;">
+					<slot name="right"></slot>
+				</view>
+                <!-- #endif -->
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				StatusBar: this.StatusBar,
+				CustomBar: this.CustomBar
+			};
+		},
+		name: 'cu-custom',
+		computed: {
+			style() {
+				var StatusBar= this.StatusBar;
+				var CustomBar= this.CustomBar;
+				var bgImage = this.bgImage;
+				// var style = `height:${CustomBar}px;padding-top:${StatusBar}px;`;
+				var style = `height:${CustomBar}px;padding-top:${StatusBar}px;`;
+				if (this.gradual){
+					style = `height:${CustomBar}px;padding-top:${StatusBar}px; background-color: rgba(0, 0, 0, ` + this.scrollTop + `);`;
+				} else if (this.bgImage) {
+					style = `${style}background-image:url(${bgImage})`;
+				}
+				return style
+			}
+		},
+		props: {
+			bgColor: {
+				type: String,
+				default: ''
+			},
+			bgImage: {
+				type: String,
+				default: ''
+			},
+			isBack: {
+				type: [Boolean, String],
+				default: false
+			},
+			isDef: {
+				type: [Boolean, String],
+				default: false
+			},
+			gradual: {
+				type: [Boolean],
+				default: false
+			},
+			scrollTop: {
+				type: [Number],
+				default: 0
+			}
+		},
+		methods: {
+			onBackClick() {
+				if (this.isDef){
+					this.$emit("onBackClick");
+				}else{
+					uni.navigateBack({
+						delta: 1
+					});
+				}
+			},			
+			onDefClick(){
+				this.$emit("onDefClick");
+			}
+		}
+	}
+</script>
+
+<style>
+
+</style>

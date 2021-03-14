@@ -1,0 +1,141 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+		    "path" : "pages/home/home",
+		    "style" :{}
+		    
+		},
+		{
+			"path": "pages/index/index",
+			"style": {
+			}
+		}
+        ,{
+            "path" : "pages/member/member",
+            "style" : {}
+        },{
+            "path" : "pages/login/login",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/reg/reg",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/member/pwd/pwd",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/member/myFuling/myFuling",
+            "style" : {
+        		"navigationBarTitleText":"我的项目"
+        	}
+        },
+		{
+		    "path" : "pages/member/userinfo/userinfo",
+		    "style" : {
+				"navigationBarTitleText":"个人资料"
+			}
+		}
+        ,{
+            "path" : "pages/member/user/user",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/cardLineDetail/cardLineDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/member/linePro/linePro",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/search/search",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/member/implement/implement",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/cardLineDetail/line-pro-info/line-pro-info",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/cardLineDetail/line-pro-constr-info/line-pro-constr-info",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/cardLineDetail/line-constr-info/line-constr-info",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
+	"globalStyle": {
+		"navigationStyle": "custom",
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "专线小程序",
+		"navigationBarBackgroundColor": "#58b7e9",
+		"backgroundColor": "#58b7e9",
+		"app-plus":{
+			"titleNView":false,
+			"scrollIndicator":"none"
+		}
+	},
+	"tabBar":{
+		"navigationBarBackgroundColor":"#fff",
+		"list":[
+			{
+				"text":"项目",
+				"pagePath":"pages/index/index",
+				"iconPath":"static/fuled/faxian-1.png",
+				"selectedIconPath":"static/fuled/faxian.png"
+			},
+			{
+				"text":"我的",
+				"pagePath":"pages/member/member",
+				"iconPath":"static/fuled/wode-1.png",
+				"selectedIconPath":"static/fuled/wode.png"
+			}
+		]
+	}
+}

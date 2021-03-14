@@ -1,0 +1,58 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"userPhone":{
+			"title":"电话",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"userPhone"
+		},
+		"userName":{
+			"title":"名称",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"userName"
+		},
+		"password":{
+			"title":"密码",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"password"
+		},
+		"userType":{
+			"title":"类型",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"userType"
+		},
+		"implementName":{
+			"title":"施工队名称",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"implementName"
+		},
+		"implementAddr":{
+			"title":"施工队地址",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"implementAddr"
+		},
+		"loginName":{
+			"title":"登陆账号",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"loginName"
+		}
+	}
+}

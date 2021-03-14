@@ -1,0 +1,28 @@
+@font-face {font-family: "iconfont";
+  src: url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAUgAAsAAAAACmgAAATUAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDGgqIKIZ6ATYCJAMUCwwABCAFhG0HQBvmCMgOJc3AwADAAIBEPPz/fr/2ufJ4mDZIoolF96ySSR4a5NHomVCnTenTx0v4R++WP5uFkwSz89SMo6JOQ8WQDeK5UBeoGFI3/fJn+j/HTJe+4Sz/gueSVRQNttGAB5TXTfeOTvTOjhrs2g/phrFLyzyeQI8pNaHtDt2skKNQVwvEjddth5yITinAh1bZZGxbIN5D1abZ1A0A75z7j/9QJ3JAUjOo6+5dt3dBq1/wKeNJ/0+CKwsB/O4soHciYxkoxEWm7Qj2YsuwHtEmMV9cWQS/8v8dC4U3WWaKLP3zRAOqrA9i1+OFXwxeIA+okaE8QSlHnqFg+2XV2qYH4yAuAeIbqIppZ2rVyLqGdEqD0qxUy1VIpayokmu3p9SNffDAKnv0iMOPH9vkDx/2629Ydoqm4ydMuiXw8WQlJm3cvJvbdCofTT5dhUkmwYcT1vxV9/JxdwpNhK9n68ufYY30au7QvWK0+n5DJrFVDyvudDnTmqJp6H2V1FNLdO6v+LK9AE/mUvTwDVsgPW2tZE9sR3hy/0lLaEfKgNNGZwKOng2IS8WX6CCZTBhtaWN7V44g3Z4HVjqO0P7HNibpRvDlRj36QMUjhbpJeiapDz9g/EFV3ZKU0bb8/uOG8mR9z/ANJ0xzfKrE6QK07FS/YzTauhe8VEkvR2jyMkfO9VjjjZZkwNNS/cZKaPL+GoMO3CmElXfrM4fvl6BV9wY8ils37OAyt+ofJmzp7U2n7Wp2ZxllHzt5CPVGZ9vDlP1G5G9hXrLl2EWFOwrW+VtWzs3Fk15HotzYnYvvjFLIi2ffKV3wgmmuGKUdxKXPVPmlypnNHRrLpD+xzfas+7N4Qp2fTq+JM2omvqatooLcxiyDfmYvL/pXb6lhwWqql6SVu49e1yS9tHMaf9avKGp9Qztce6M12ED3TLtBW+sQUlOZouFSjW2/MRJM7tM8mj54hOFL7nH6iy42eeAh+TAbtmsEaIfv0Y5CUik1hO+JPy6WI7WA2p+z6BDaXe9RVUmrv3pJqT4B4XGl9oZHwG7hJud3a9uXLPIMb7c2p+uaNrSebtPQetQ2d8/XAViZMv/0++Jz8nz13z8/2ZN3sfyTdfdf/FudLz+3+PefzMV14Pz0mkxu+dxZa6g1s5z3WobUa1uyrE1JlzGF1fQtPnbRreqs+7WFvlrhGBgF0NmPb+LuQI6e3pJnufLDMGWzX3OYd3rsx8/hn5G3s18C1fO0EjT/a+VX7CmSUNXXItQbPOGU1a1skNCjBx3ArhGvujGO6zIRWuMBJF0mIWtNIwt2Gapeq9BorUGPJR137jVKgEXJBRZNBxCG7IZkwHfIhtxEFuxLqCZ8gcZQYOhxEtp99poNL91WIHaRuFjHaNbrDId43SjSbnEf4o4F7EJY6BA5IpR5g2xtsyWe7EhCROhig7IR7jqiyLO8EA6yHcDJSCAQZiNC2EecotkjipEmpaV81g2ZneEg0LYICDsR4cJyGI3l5RQWwlujRXTi7vsg3GIC7ISChiIrhxCU8U7Oqs3MUgHZURaq1HAqlWVGcKtDRBEei6cLw4JYHZCFCGixMFYke5EP4SQy8zSIRDRRigbxVWXm4RXBc8z/b5qql61BIYwkSIqyID/GQpSfSPlYgLiwwx4CAA==') format('woff2');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.fuled-icon-qun:before {
+  content: "\e603";
+}
+
+.fuled-icon-ke:before {
+  content: "\e602";
+}
+
+.fuled-icon-fuled:before {
+  content: "\e601";
+}
+
+.fuled-icon-ban:before {
+  content: "\e600";
+}
+

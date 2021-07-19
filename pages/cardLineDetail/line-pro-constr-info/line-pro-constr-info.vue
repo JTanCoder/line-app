@@ -42,9 +42,11 @@
 				index:-1,
 				picker: [],
 				pickerData: [],
+				user:{},
 			}
 		},
 		onShow(){
+			this.user = JSON.parse(this.$util.getStorage("user"));
 			this.getUserType2();
 		},
 		onLoad(e) {
@@ -59,7 +61,7 @@
 		methods: {
 			getUserType2(){
 				let that = this ;
-				db.collection("line-app-user").where({userType:'2'}).get()
+				db.collection("line-app-user").where({userType:'3',creator:that.user._id}).get()
 				.then(res => {
 					that.picker = [];
 					that.pickerData= [];

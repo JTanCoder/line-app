@@ -1,10 +1,11 @@
 {
     "name" : "专线小程序",
-    "appid" : "__UNI__D6D21E2",
+    "appid" : "__UNI__0381521",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
+    // "debug" : true,
     /* 5+App特有相关 */
     "app-plus" : {
         "usingComponents" : true,
@@ -57,11 +58,12 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "wx9de90f8beeddf675",
+        "appid" : "wxb64b321077517d68",
         "setting" : {
             "urlCheck" : false
         },
-        "usingComponents" : true
+        "usingComponents" : true,
+        "permission" : {}
     },
     "mp-alipay" : {
         "usingComponents" : true

@@ -20,14 +20,14 @@
 			<view class="title">施工队地址</view>
 			<m-input placeholder="请输入施工队地址" v-model="form.implementAddr" name="implementAddr" ></m-input>
 		</view>
-		<view class="cu-form-group">
+		<!-- <view class="cu-form-group">
 			<view class="title">施工队账号</view>
 			<m-input placeholder="请输入施工队账号" v-model="form.loginName" name="loginName" ></m-input>
 		</view>
 		<view class="cu-form-group">
 			<view class="title">施工队密码</view>
 			<m-input type="password"  placeholder="请输入施工队账号密码"  v-model="form.password" name="password"></m-input>
-		</view>
+		</view> -->
 		 
 		<view class="main-bg-color rounded p-3 flex align-center justify-center flex-1" hover-class="main-bg-hover-color" @click="bindLogin">
 			<text class="text-white font-md">提 交</text>
@@ -50,11 +50,19 @@
 					userPhone:'',
 					userName: '',
 					password: '',
-					userType:'2'
+					userType:'3',
+					avatarUrl:"",
+					nickName:"",
+					loginName:'',
+					openid:""
 				},
 				radioItem:[{value:'1',text:'项目经理'},{value:'2',text:'施工队'}],
-				prePage:false
+				prePage:false,
+				user:{},
 			}
+		},
+		onShow() {
+			this.user = JSON.parse(this.$util.getStorage("user"));
 		},
 		methods: {
 			changeInvite(e){
@@ -71,20 +79,23 @@
 					});
 					return;
 				}
+				this.form.loginName = this.form.userPhone ;
 				if (this.form.userName == '') {
 					uni.showToast({
 						icon: 'none',
-						title: '账号名称不能为空'
+						title: '负责人名称不能为空'
 					});
 					return;
 				}
-				if (this.form.password.length < 6) {
+				
+				if (this.form.implementName == '') {
 					uni.showToast({
 						icon: 'none',
-						title: '密码最短为 6 个字符'
+						title: '施工队称不能为空'
 					});
 					return;
 				}
+				 this.form['creator'] = this.user._id
 				
 				uni.showLoading({
 					title: '处理中...'

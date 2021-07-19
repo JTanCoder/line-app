@@ -10,33 +10,13 @@
                 </view>
 			</view>
         </view>
-		<view class="cu-form-group" v-if="domType =='1'">
-			<view class="action">施工凭证附件</view>
-			<view class="action">{{dataInfo.constrInfo.fileList.length}}/5</view>
-		</view>
-        <view class="form-image-item" v-if="domType =='1'">
-        	<view class="grid col-4 grid-square flex-sub">
-        		<view class="bg-img" v-for="(item,index) in dataInfo.constrInfo.fileList" :key="index" @tap="ViewImage" :data-url="dataInfo.constrInfo.fileList[index]">
-        		 <image :src="dataInfo.constrInfo.fileList.length>0 ? dataInfo.constrInfo.fileList[index]:'/static/fuled/tupian.png'" mode="aspectFill"></image>
-        			<view class="cu-tag bg-red" v-if="user.userType =='2' && dataInfo.status==0 " @tap.stop="DelImg" :data-index="index">
-        				<text class='cuIcon-close'></text>
-        			</view>
-        		</view>
-        		<view class="solids" @tap="ChooseImage" v-if="user.userType =='2' && dataInfo.constrInfo.fileList.length<5 && dataInfo.constrInfo.issubmit==0" >
-        			<text class='cuIcon-cameraadd'></text>
-        		</view>
-        	</view>
-        </view>
-		<view class="cu-form-group align-start" v-if="domType =='1'">
-			<view class="title">施工描述</view>
-			<textarea maxlength="-1"  @input="textareaBInput0" v-model="dataInfo.constrInfo.remark" placeholder="未填写"></textarea>
-		</view>
+		
 		<view class="cu-form-group" v-if="domType =='2'">
 			<view class="title">评价等级</view>
 			<view>
 				<radio-group class="uni-input"   @change="changeInvite">
 					<label v-for="(item,index) in radioItem" :key="index" class="">
-						<radio :value="item.value" :disabled="(user.userType =='1' && dataInfo.appraisalInfo.issubmit==0 && dataInfo.status==5)?false:true" :checked="getcheck(item)" /><text>{{item.text}}</text> 
+						<radio :value="item.value" :disabled="(user.userType =='-1' && dataInfo.appraisalInfo.issubmit==0 && dataInfo.status==4)?false:true" :checked="getcheck(item)" /><text>{{item.text}}</text> 
 					</label>
 				</radio-group>
 			</view>
@@ -48,22 +28,21 @@
 		<view  class="cu-form-group align-start" v-if="domType =='2' && dataInfo.appraisalInfo.issubmit == 1">
 			<view class="pl-2" >{{dataInfo.appraisalInfo.remark}}</view>
 		</view> 
-		<view class="cu-form-group align-start" v-if="domType =='3' && dataInfo.complaintInfo.issubmit == 0">
-			<view class="title">客户评价</view>
-			<textarea maxlength="-1" @input="textareaBInput2" v-model="dataInfo.complaintInfo.remark" placeholder="未填写"></textarea>
-		</view>
-		<view v-if="dataInfo.complaintInfo.issubmit == 1 && domType =='3' "  class="cu-form-group align-start" >
-			<view class="pl-2"  >{{dataInfo.complaintInfo.remark}}</view>
-		</view>
-		<view class="cu-form-group" v-if="showPhone && user.userType =='-1' && domType =='4' ">
+		
+		<view class="cu-form-group" v-if="showPhone &&  domType =='4' && dataInfo.status != '4' ">
 			<view class="title">项目经理电话</view>
 			<input v-model="dataInfo.jlList[0].userPhone" name="input" @click="toCallPhone(dataInfo.jlList[0].userPhone)"></input>
 			<text class='cuIcon-phone text-green' @click="toCallPhone(dataInfo.jlList[0].userPhone)"></text>
 		</view>
-		<view class="cu-form-group" v-if="showPhone && user.userType =='-1' && domType =='4' && dataInfo.sgList.length > 0">
+		<view class="cu-form-group" v-if="showPhone &&  domType =='4' && dataInfo.status != '4' && dataInfo.sgList.length > 0">
 			<view class="title">施工队电话</view>
 			<input v-model="dataInfo.sgList[0].userPhone" name="input" @click="toCallPhone(dataInfo.sgList[0].userPhone)"></input>
 			<text class='cuIcon-phone text-green' @click="toCallPhone(dataInfo.sgList[0].userPhone)"></text>
+		</view>
+		<view class="cu-form-group" v-if="showPhone && domType =='4' && dataInfo.status == '4' ">
+			<view class="title">客服经理电话</view>
+			<input v-model="dataInfo.servicePhone" name="input" @click="toCallPhone(dataInfo.servicePhone)"></input>
+			<text class='cuIcon-phone text-green' @click="toCallPhone(dataInfo.servicePhone)"></text>
 		</view>
     </view>
 </template>

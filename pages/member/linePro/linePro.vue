@@ -16,10 +16,27 @@
 			<view class="title">客户地址</view>
 			<m-input placeholder="请输入客户地址" v-model="form.clientAddr" name="clientAddr"></m-input>
 		</view>
-		<!-- <view class="cu-form-group">
-			<view class="title">合同编号</view>
-			<m-input placeholder="请输入合同编号" v-model="form.contractNumber" name="contractNumber"></m-input>
+		<view class="cu-form-group">
+			<view class="title">客服经理电话</view>
+			<m-input placeholder="请输入客服经理电话" v-model="form.servicePhone" name="servicePhone"></m-input>
 		</view>
+		<view class="cu-form-group">
+			<view class="title">预计完工时间</view>
+			<picker mode="date" :value="form.endDate" start="2021-01-01" end="2099-01-01" @change="DateChange">
+				<view class="picker">
+					{{form.endDate}}
+				</view>
+			</picker>
+		</view>
+		<view class="cu-form-group">
+			<view class="title">选择项目所属区域</view>
+			<picker @change="PickerChange" :value="index" :range="picker">
+				<view class="picker">
+					{{index>-1?picker[index]:'超出部分以 ... 显示'}}
+				</view>
+			</picker>
+		</view>
+		<!-- 
 		<view class="cu-form-group">
 			<view class="action">合同附件</view>
 			<view class="action">{{form.contractList.length}}/1</view>
@@ -37,14 +54,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="cu-form-group">
-			<view class="title">选择施工队</view>
-			<picker @change="PickerChange" :value="index" :range="picker">
-				<view class="picker">
-					{{index>-1?picker[index]:'超出部分以 ... 显示'}}
-				</view>
-			</picker>
-		</view> -->
+		 -->
 		<view class="main-bg-color rounded p-3 flex align-center justify-center flex-1" hover-class="main-bg-hover-color" @click="doSave">
 			<text class="text-white font-md">提 交</text>
 		</view>
@@ -66,10 +76,14 @@
 					clientPhone:'',
 					clientName: '',
 					clientAddr: '',
-					contractNumber:'',
+					servicePhone:'',
+					endDate:this.$time.getFormatDate(),
+					areaId:'',
 					contractList: [],
 					creator:this.$store.state.user.user.loginName,
 					implementId:'',
+					archive:false,
+					okDate:"",
 					status:0,//0:新建-->合同签订 -->1:合同签订-->设计院勘察 2:设计院勘察-->方案审批 3:方案审批 -->分配施工队 4 施工中 --> 施工完成  5：完成，
 					appraisalInfo: {
 						"remark": "",
@@ -85,21 +99,7 @@
 						"contractInfo": {
 							"remark": "",
 							"fileList": [],
-							"title": "合同签订",
-							"time": "",
-							"issubmit": 0
-						},
-						"designInfo": {
-							"remark": "",
-							"fileList": [ ],
-							"title": "设计院勘察",
-							"time": "",
-							"issubmit": 0
-						},
-						"programlInfo": {
-							"remark": "",
-							"fileList": [],
-							"title": "方案审批",
+							"title": "施工组网情况",
 							"time": "",
 							"issubmit": 0
 						},
@@ -109,6 +109,13 @@
 							"time": "",
 							"implementId": "",
 							"issubmit": 0
+						},
+						"conformInfo": {
+							"remark": "",
+							"fileList": [],
+							"title": "项目确认信息",
+							"time": "",
+							"issubmit": 0
 						}
 					}
 				},
@@ -117,9 +124,12 @@
 				pickerData: [],
 				radioItem:[{value:'1',text:'项目经理'},{value:'2',text:'施工队'}],
 				prePage:false,
+				user:{},
 			}
 		},
 		onShow(){
+			this.user = JSON.parse(this.$util.getStorage("user"));
+			console.log(this.user)
 			this.getUserType2();
 		},
 		onLoad(e) {
@@ -132,17 +142,20 @@
 			
 		},
 		methods: {
+			DateChange(e) {
+				this.form.endDate = e.detail.value
+			},
 			getUserType2(){
 				let that = this ;
-				db.collection("line-app-user").where({userType:'2'}).get()
+				db.collection("line-app-conpany").where({userId:this.user._id}).get()
 				.then(res => {
 					that.picker = [];
 					that.pickerData= [];
-					res.result.data.map((item)=>{
-						that.picker.push(item.implementName);
+					res.result.data[0].areaList.map((item)=>{
+						that.picker.push(item.areaName);
 						that.pickerData.push(item);
 					});
-					if(that.form.implementId){
+					if(that.form.areaId){
 						that.setPickerIndex();
 					}
 				}).catch(err => {
@@ -153,14 +166,14 @@
 			},
 			setPickerIndex(){
 				this.pickerData.map((item,i)=>{
-					if(this.form.implementId == item._id){
+					if(this.form.areaId == item._id){
 						this.index = i ;
 					}
 				})
 			},
 			PickerChange(e) {
 				this.index = e.detail.value
-				this.form.implementId = this.pickerData[this.index]._id
+				this.form.areaId = this.pickerData[this.index]._id
 			},
 			changeInvite(e){
 				this.form.userType = e.detail.value
@@ -243,6 +256,41 @@
 				})
 			},
 			async doSave() {
+				if (this.form.clientPhone == '') {
+					uni.showToast({
+						icon: 'none',
+						title: '客户电话不能为空'
+					});
+					return;
+				}
+				if (this.form.clientName == '') {
+					uni.showToast({
+						icon: 'none',
+						title: '专线名称不能为空'
+					});
+					return;
+				}
+				if (this.form.servicePhone == '') {
+					uni.showToast({
+						icon: 'none',
+						title: '客服经理电话不能为空'
+					});
+					return;
+				}
+				if (this.form.endDate == '') {
+					uni.showToast({
+						icon: 'none',
+						title: '项目预估完成时间不能为空'
+					});
+					return;
+				}
+				if (this.form.areaId == '') {
+					uni.showToast({
+						icon: 'none',
+						title: '项目所属区域不能为空'
+					});
+					return;
+				}
 				uni.showLoading({
 					title: '处理中...'
 				})

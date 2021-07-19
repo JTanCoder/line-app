@@ -13,46 +13,30 @@
 		<view>
 			<view class="cu-timeline "  >
 				
-				<view class="cu-time" v-if="dataInfo.proInfo.contractInfo.issubmit != 0 ">{{dataInfo.proInfo.contractInfo.title}}:{{dataInfo.proInfo.contractInfo.time}}</view>
-				<view class="cu-item" v-if="dataInfo.proInfo.contractInfo.issubmit != 0 ">
-					<view class="content bg-white">
-						<view >{{dataInfo.proInfo.contractInfo.remark}}</view>
-						<view class="cu-list menu-avatar radius margin-top">
-							<view class="cu-item">
-								<view class="grid col-4 grid-square flex-sub">
-									<view class="bg-img" v-for="(item,index) in dataInfo.proInfo.contractInfo.fileList" :key="index" @tap="ViewImage" :data-list="dataInfo.proInfo.contractInfo.fileList" :data-url="dataInfo.proInfo.contractInfo.fileList[index]">
-									 <image :src="dataInfo.proInfo.contractInfo.fileList.length>0 ? dataInfo.proInfo.contractInfo.fileList[index]:'/static/fuled/tupian.png'" mode="aspectFill"></image>
-										<!-- <view class="cu-tag bg-red"   @tap.stop="DelImg" :data-index="index">
-											<text class='cuIcon-close'></text>
-										</view> -->
-									</view>
-									<!-- <view class="solids" @tap="ChooseImage"  >
-										<text class='cuIcon-cameraadd'></text>
-									</view> -->
-								</view>
-							</view> 
-						</view>
-					</view>
-				</view>
-				
-				<view class="cu-time" v-if="dataInfo.proInfo.teamInfo.issubmit != 0 ">{{dataInfo.proInfo.teamInfo.title}}:{{dataInfo.proInfo.teamInfo.time}}</view>
-				<view class="cu-item" v-if="dataInfo.proInfo.teamInfo.issubmit != 0 ">
-					<view class="content bg-white">
-						<view >{{dataInfo.proInfo.teamInfo.remark}}</view>
-						<view class="cu-list radius margin-top">
-							<view class="cu-item">
-								<view class="content">
-									<view class="text-grey">{{dataInfo.sgList[0].implementName}}</view>
-									<view class="text-gray text-sm">
-									<text class=""></text>负责人：{{dataInfo.sgList[0].userName != undefined ? dataInfo.sgList[0].userName:""}}</view>
-									<text class=""></text>电话：{{dataInfo.sgList[0].userPhone != undefined ? dataInfo.sgList[0].userPhone:""}}</view>
-									<text class=""></text>地址：{{dataInfo.sgList[0].implementAddr != undefined ? dataInfo.sgList[0].implementAddr:""}}</view>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view> 
-				
+				 
+				 <view class="cu-time" v-if="dataInfo.proInfo.conformInfo.issubmit != 0">{{dataInfo.proInfo.conformInfo.title}}:{{dataInfo.proInfo.conformInfo.time}}</view>
+				 <view class="cu-item" v-if="dataInfo.proInfo.conformInfo.issubmit != 0">
+				 	<view class="content bg-white">
+				 		<view >{{dataInfo.proInfo.conformInfo.remark}}</view>
+				 		<view class="cu-list menu-avatar radius margin-top">
+				 			<view class="cu-item">
+				 				<view class="grid col-4 grid-square flex-sub">
+				 					<view class="bg-img" v-for="(item,index) in dataInfo.proInfo.conformInfo.fileList" :key="index" @tap="ViewImage" :data-list="dataInfo.proInfo.conformInfo.fileList" :data-url="dataInfo.proInfo.conformInfo.fileList[index]">
+				 					 <image :src="dataInfo.proInfo.conformInfo.fileList.length>0 ? dataInfo.proInfo.conformInfo.fileList[index]:'/static/fuled/tupian.png'" mode="aspectFill"></image>
+				 						<!-- <view class="cu-tag bg-red"   @tap.stop="DelImg" :data-index="index">
+				 							<text class='cuIcon-close'></text>
+				 						</view> -->
+				 					</view>
+				 					<!-- <view class="solids" @tap="ChooseImage"  >
+				 						<text class='cuIcon-cameraadd'></text>
+				 					</view> -->
+				 				</view>
+				 			</view> 
+				 		</view>
+				 	</view>
+				 </view>
+				 
+				 
 			</view> 
 		</view>
     </view>

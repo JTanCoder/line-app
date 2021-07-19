@@ -4,20 +4,20 @@
 			<block slot="content">专线信息检索</block>
 		</cu-custom>
 		 <view class="cu-list menu-avatar" v-show="search">
-		 	<view class="cu-item" :class="modalName=='move-box-'+ index?'move-cur':''" v-for="(item,index) in cardList" :key="index"
+		 	<view class="cu-item" :style="[{height:'250rpx'}]" :class="modalName=='move-box-'+ index?'move-cur':''" v-for="(item,index) in cardList" :key="index"
 		 	 :data-target="'move-box-' + index">
 		 		<view class="cu-avatar round lg" :style="[{backgroundImage:'url('+defImg+')'}]"></view>
 		 		<view class="content" @click="toProDetail(item)">
-		 			<view class="text-grey">专线名称:{{item.clientName}}</view>
-		 			<view class="text-gray text-sm">
+		 			<view class="text-grey"><p class="text-cut-v2">专线名称:{{item.clientName}}</p></view>
+		 			<view class="text-gray text-sm text-cut">
 		 				<text class="cuIcon-infofill  margin-right-xs">客户地址:</text> {{item.clientAddr}}
-							</view>
-							<view class="text-gray text-sm">
-								<text class="cuIcon-infofill  margin-right-xs">客户电话:</text> {{item.clientPhone}}
-							</view>
-							<!-- <view class="text-gray text-sm">
-								<text class="cuIcon-infofill  margin-right-xs"></text> {{item.clientPhone}}
-							</view> -->
+					</view>
+					<view class="text-gray text-sm">
+						<text class="cuIcon-infofill  margin-right-xs">客户电话:</text> {{item.clientPhone}}
+					</view>
+					<view class="text-gray text-sm">
+						<text class="cuIcon-infofill  margin-right-xs">完成时间:</text> {{item.endDate}}
+					</view>
 		 		</view>
 		 		<view class="action">
 		 			<view class="text-grey text-xs">状态</view>
@@ -30,8 +30,8 @@
 			 	<image style="height: 280rpx;" src="../../static/chinamobile.jpg"></image>
 			 </view>
 			 <view class="px-2">
-			 	<m-input type="text" class="bg-light px-3 mb-3 font" placeholder="请输入您的电话号码" style="height: 80rpx;width: 95%;" v-model="form.userPhone"></m-input>
-			 	
+			 	<m-input type="text" class="bg-light px-3 mb-3 font" placeholder="请输入您的电话号码绑定查询" style="height: 80rpx;width: 95%;" v-model="form.userPhone"></m-input>
+			 	 
 			 	<view class="main-bg-color rounded p-3 flex align-center justify-center flex-1" hover-class="main-bg-hover-color" @click="bindLogin">
 			 		<text class="text-white font-md">查询</text>
 			 	</view>
@@ -79,7 +79,14 @@
 			}
 		},
 		onShow(){
-			this.bindLogin()
+			//if(this.$store.state.bindUser){
+				this.user = JSON.parse(this.$util.getStorage("user"));
+				if(this.user && this.user.userType == "-1"){
+					this.form.userPhone = this.user.userPhone ;
+					this.bindLogin()
+				}
+			//}
+			
 		},
 		onLoad(e) {
 			if(e.prePage != undefined && e.prePage != null && e.prePage != ''){
@@ -111,6 +118,11 @@
 					}
 				});
 			},
+			getPhoneNumber(e) {  
+				console.log(e.detail.errMsg);  
+				console.log(e.detail.iv);  
+				console.log(e.detail.encryptedData);  
+			} ,
 			toReg(){
 				uni.navigateTo({
 					url:"../login/login"
@@ -130,27 +142,19 @@
 			},
 			async bindLogin() {
 				let _this = this ;
-				// db.collection("line-app-pro")
-				// .where({clientPhone:this.form.userPhone})
-				// .get().then(res => {
-				// 		_this.cardList = res.result.data ;
-				// 		if(res.result.data.length <= 0){
-				// 			uni.showToast({
-				// 				icon:"success",
-				// 				title:"没有查询到您的专线信息"
-				// 			});
-				// 		}else{
-				// 			_this.search = true ;
-				// 		}
-				// 	}).catch(err => {
-				// 		console.error(err)
-				// 	})
-				// 	.finally(() => {
-				// 		uni.hideLoading()
-				// 	})
+				
+				let that = this ;
 				if(!this.form.userPhone){
-					return ;
+					uni.showToast({
+						icon: 'none',
+						title: '请输入您要绑定查询的电话号码'
+					});
+					return;
 				}
+				uni.showLoading({
+					title: '处理中...'
+				}); 
+				
 				let condition = {clientPhone:this.form.userPhone};
 				
 				const dbCmd = db.command
@@ -183,28 +187,59 @@
 				})
 				.end()
 				.then(res => {
-						_this.cardList = res.result.data ;
-						if(res.result.data.length <= 0){
-							uni.showToast({
-								icon:"success",
-								title:"没有查询到您的专线信息"
-							});
-						}else{
-							_this.search = true ;
-							let user = {
-								"userPhone": "-1",
-								"userName": "-1",
-								"userType": "-1",
-								"loginName": "-1"
+					_this.cardList = res.result.data ;
+					if(res.result.data.length <= 0){
+						uni.showToast({
+							icon:"success",
+							title:"没有查询到您的专线信息"
+						});
+					}else{
+						db.collection("line-app-user").where({userPhone: _this.form.userPhone}).get()
+						.then(res => {
+							if(!res.result.data || res.result.data.length <= 0){
+								let user = {
+									"userPhone": _this.form.userPhone,
+									"userName": "-1",
+									"userType": "-1",
+									"loginName": _this.form.userPhone,
+									"openid":that.$util.getStorage('openid'),
+									"avatarUrl":that.$util.getStorage('avatarUrl'),
+									"nickName":that.$util.getStorage('nickName')
+								}
+								 
+								console.log(that.$util.getStorage('avatarUrl'))
+								db.collection('line-app-user').add(user).then(res=>{
+									console.log(res)
+									user['_id']=res.result.id;
+									this.$store.dispatch('login',user);
+									_this.search = true ;
+									uni.hideLoading()
+								}); 
+							}else{
+								let user = res.result.data[0];
+								db.collection('line-app-user').doc(user._id).update({
+									openid:that.$util.getStorage('openid'),
+									avatarUrl:that.$util.getStorage('avatarUrl'),
+									nickName:that.$util.getStorage('nickName')
+								}).then(res=>{
+									console.log(res)
+									user.openid = that.$util.getStorage('openid');
+									user.avatarUrl = that.$util.getStorage('avatarUrl');
+									user.nickName = that.$util.getStorage('nickName');
+									this.$store.dispatch('login',user);
+									_this.search = true ;
+									uni.hideLoading()
+								});
 							}
-							this.$store.dispatch('login',user)
-						}
-					}).catch(err => {
-						console.error(err)
-					})
-					.finally(() => {
-						uni.hideLoading()
-					})	
+						})
+						
+					}
+				}).catch(err => {
+					console.error(err)
+				})
+				.finally(() => {
+					uni.hideLoading()
+				})	
 			},
 			toProDetail(item){
 				uni.navigateTo({
@@ -213,22 +248,19 @@
 			},
 			getLineProStatus(status){
 				if(status == 0){
-					return "合同签订" ;
+					return "新建-待组网" ;
 				}
 				if(status == 1){
-					return "设计院勘察" ;
+					return "待分配施工队" ;
 				}
 				if(status == 2){
-					return "方案审批" ;
-				}
-				if(status == 3){
-					return "分配施工队" ;
-				}
-				if(status == 4){
 					return "施工中" ;
 				}
-				if(status == 5){
-					return "施工完成" ;
+				if(status == 3){
+					return "待确认" ;
+				}
+				if(status == 4){
+					return "项目结束" ;
 				}
 			},
 			oauth(value) {

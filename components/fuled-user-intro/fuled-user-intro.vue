@@ -4,12 +4,13 @@
         <view class="bg-white">
             <view class="user-concern">
                 <view class="cu-avatar xl round user-icon" :style="userIcon"></view>
-				<button @tap="onDefClick1" v-if="user.userType == 1 && info.status == 5  && info.appraisalInfo.issubmit == 0"  class="cu-btn round sm bg-yellow user-concern-but text-white">去评价</button>
-				<button @tap="onDefClick2" v-if="user.userType == -1 && info.complaintInfo.issubmit == 0 "  class="cu-btn round sm bg-yellow user-concern-but text-white">去投诉</button>
+				<button @tap="onDefClick2" v-if="user.userType == -1 && info.appraisalInfo.issubmit == 0 && info.status=='4' "  class="cu-btn round sm bg-yellow user-concern-but text-white">去评价</button>
             </view>
-            <view class="user-name text-cut" :style="screenWidth">{{info.clientName}}</view>
+            <view class="user-name " :style="screenWidth">{{info.clientName}}</view>
             <view class="user-fuled-no text-cut" :style="screenWidth">客户电话：{{info.clientPhone}}</view>
-            <view class="user-motto text-cut" :style="screenWidth">客户地址：{{info.clientAddr}}</view>
+            <view class="user-motto" :style="screenWidth">客户地址：{{info.clientAddr}}</view>
+			<view class="user-motto text-cut" :style="screenWidth">预计完成时间：{{info.endDate}}</view>
+			<view class="user-motto text-cut" :style="screenWidth" v-if=" info.status=='4' ">实际完成时间：{{info.okDate}}</view>
             <view class="user-share">
                 <text class="text-gray margin-left-sm user-share-title">项目经理:{{info.jlList[0].userName}}</text>
                 <text class="text-gray margin-left-sm user-share-title">施工队:{{info.sgList[0].userName?info.sgList[0].userName:'未分配'}}</text>
@@ -90,22 +91,19 @@
             },
 			getLineProStatus(status){
 				if(status == 0){
-					return "合同签订" ;
+					return "新建-待组网" ;
 				}
 				if(status == 1){
-					return "设计院勘察" ;
+					return "待分配施工队" ;
 				}
 				if(status == 2){
-					return "方案审批" ;
-				}
-				if(status == 3){
-					return "分配施工队" ;
-				}
-				if(status == 4){
 					return "施工中" ;
 				}
-				if(status == 5){
-					return "施工完成" ;
+				if(status == 3){
+					return "施工完成-待确认" ;
+				}
+				if(status == 4){
+					return "项目结束" ;
 				}
 			},
 			getBtnText(item){

@@ -36,6 +36,36 @@
 			"trim":"both",
 			"format":"contractNumber"
 		},
+		"servicePhone":{
+			"title":"客服经理电话",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"servicePhone"
+		},
+		"endDate":{
+			"title":"预估时间",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"endDate"
+		},
+		"areaId":{
+			"title":"所属区域",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"areaId"
+		},
+		"okDate":{
+			"title":"实际完成时间",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"okDate"
+		},
+		"archiveTime":{
+			"title":"归档时间",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"archiveTime"
+		},
 		"implementId":{
 			"title":"施工队",
 			"bsonType":"string",
@@ -46,25 +76,25 @@
 		"status":{
 			"title":"项目状态",
 			"bsonType": "int",
-			"description": "项目状态：0 新建 1 合同签订 2 设计院勘察 3 方案审批 4 施工中 5 施工完成-结束",
+			"description": "项目状态：0 新建 1 施工组网情况  2 施工中 3 施工完成-结束 4 项目确认",
 			"label": "项目状态",
 			"enum": [{
 				"text": "新建",
 				"value": 0
 			}, {
-				"text": "合同签订",
+				"text": "施工组网情况",
 				"value": 1
 			}, {
-				"text": "设计院勘察",
+				"text": "施工中",
 				"value": 2
 			}, {
-				"text": "方案审批",
+				"text": "施工完成",
 				"value": 3
 			}, {
-				"text": "施工中",
+				"text": "项目确认",
 				"value": 4
 			}, {
-				"text": "项目完成",
+				"text": "项目归档",
 				"value": 5
 			}],
 		  "errorMessage": "{label}无效"
@@ -75,6 +105,12 @@
 			"trim":"both",
 			"format":"creator",
 			"foreignKey": "line-app-user.loginName" // 使用foreignKey表示，此字段关联line-app-user表的loginName。
+		},
+		"archive":{
+			"title":"归档",
+			"bsonType":"bool",
+			"trim":"both",
+			"format":"archive"
 		},
 		"createTime":{
 			"title":"创建时间",

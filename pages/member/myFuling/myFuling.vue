@@ -10,12 +10,12 @@
 		<view >
 			<view v-if="current === 0">
 				<view class="cu-list menu-avatar">
-					<view class="cu-item" :class="modalName=='move-box-'+ index?'move-cur':''" v-for="(item,index) in listing" :key="index"
+					<view class="cu-item" :style="[{height:'250rpx'}]" :class="modalName=='move-box-'+ index?'move-cur':''" v-for="(item,index) in listing" :key="index"
 					 @touchstart="ListTouchStart" @touchmove="ListTouchMove" @touchend="ListTouchEnd"  :data-target="'move-box-' + index">
 						<view class="cu-avatar round lg" :style="[{backgroundImage:'url(/static/line-pro.png)'}]"></view>
 						<view class="content" @click="toProDetail(item)">
-							<view class="text-grey">专线名称:{{item.clientName}}</view>
-							<view class="text-gray text-sm">
+							<view class="text-grey"><p class="text-cut-v2">专线名称:{{item.clientName}}</p></view>
+							<view class="text-gray text-sm text-cut">
 								<text class="cuIcon-infofill  margin-right-xs">客户地址:</text> {{item.clientAddr}}
 							</view>
 							<view class="text-gray text-sm">
@@ -29,9 +29,12 @@
 							<view class="text-grey text-xs">状态</view>
 							<view class="cu-tag round bg-grey sm">{{getLineProStatus(item.status)}}</view>
 						</view>
-						<view v-if="user.userType=='1' && item.status == 0" class="move">
+						<view v-if="user.userType=='2' && item.status == 0" class="move">
 							<view class="bg-grey" @click="editLinePro(item)">编辑</view>
 							<view class="bg-red" @click="delLinePro(item)">删除</view>
+						</view>
+						<view v-if="user.userType=='1' && item.status == 4" class="move">
+							<view class="bg-grey" @click="archiveLinePro(item)">归档</view>
 						</view>
 					</view>
 				</view>
@@ -42,12 +45,12 @@
 			</view>
 			<view v-if="current === 1">
 				<view class="cu-list menu-avatar">
-					<view class="cu-item" :class="modalName=='move-box-'+ index?'move-cur':''" v-for="(item,index) in listover" :key="index"
+					<view class="cu-item" :style="[{height:'250rpx'}]" :class="modalName=='move-box-'+ index?'move-cur':''" v-for="(item,index) in listover" :key="index"
 					 @touchstart="ListTouchStart" @touchmove="ListTouchMove" @touchend="ListTouchEnd"  :data-target="'move-box-' + index">
 						<view class="cu-avatar round lg" :style="[{backgroundImage:'url(/static/line-pro.png)'}]"></view>
 						<view class="content" @click="toProDetail(item)">
-							<view class="text-grey">专线名称:{{item.clientName}}</view>
-							<view class="text-gray text-sm">
+							<view class="text-grey"><p class="text-cut-v2">专线名称:{{item.clientName}}</p></view>
+							<view class="text-gray text-sm text-cut">
 								<text class="cuIcon-infofill  margin-right-xs">客户地址:</text> {{item.clientAddr}}
 							</view>
 							<view class="text-gray text-sm">
@@ -146,6 +149,11 @@
 			this.getListoverData();
 		},
 		onShow(e) {
+			if(this.user.userType == '1'){
+				this.items = ["未归档","已归档"];
+			}else{
+				this.items = ['未完成', '已完成'];
+			}
 			this.page = 1
 			this.getListingData();
 			this.getListoverData();
@@ -217,36 +225,43 @@
 			},
 			getLineProStatus(status){
 				if(status == 0){
-					return "合同签订" ;
+					return "新建-待组网" ;
 				}
 				if(status == 1){
-					return "设计院勘察" ;
+					return "待分配施工队" ;
 				}
 				if(status == 2){
-					return "方案审批" ;
-				}
-				if(status == 3){
-					return "分配施工队" ;
-				}
-				if(status == 4){
 					return "施工中" ;
 				}
-				if(status == 5){
-					return "施工完成" ;
+				if(status == 3){
+					return "待确认" ;
+				}
+				if(status == 4){
+					return "项目结束" ;
 				}
 			},
 			getListingData(){
 				let _this = this;
 				let condition = {};
-				if(this.user.userType == '1'){
+				if(this.user.userType == '0'){
+					 condition = {
+					 	status:{$in:[0,1,2,3]},
+					 }
+				}else if(this.user.userType == '1'){
+					condition = {
+						archive:false,
+						areaId:this.user.areaId,
+						status:{$in:[4]},
+					}
+				}else if(this.user.userType == '2'){
 					condition = {
 						creator:this.user.loginName,
-						status:{$in:[0,1,2,3,4]},
+						status:{$in:[0,1,2,3]},
 					}
-				}else{
+				}else if(this.user.userType == '3'){
 					condition = {
 						implementId:this.user._id,
-						status:{$in:[0,1,2,3,4]},
+						status:{$in:[0,1,2,3]},
 					}
 				}
 				const dbCmd = db.command
@@ -290,15 +305,25 @@
 			getListoverData(){
 				let _this = this;
 				let condition = {};
-				if(this.user.userType == '1'){
+				if(this.user.userType == '0'){
+					 condition = {
+					 	status:{$in:[4]},
+					 }
+				}else if(this.user.userType == '1'){
+					condition = {
+						archive:true,
+						areaId:this.user.areaId,
+						status:{$in:[4]},
+					}
+				}else if(this.user.userType == '2'){
 					condition = {
 						creator:this.user.loginName,
-						status:{$in:[5]},
+						status:{$in:[4]},
 					}
-				}else{
+				}else if(this.user.userType == '3'){
 					condition = {
 						implementId:this.user._id,
-						status:{$in:[5]},
+						status:{$in:[4]},
 					}
 				}
 				const dbCmd = db.command
@@ -338,6 +363,22 @@
 					.finally(() => {
 						uni.hideLoading()
 					})
+			},
+			archiveLinePro(item){
+				let that = this ;
+				uni.showLoading({
+					title: '处理中...'
+				})
+				 
+				db.collection("line-app-pro").doc(item._id).update({
+					archive:true,
+					archiveTime:that.$time.getFormatDate(),
+				}).then(res=>{
+					console.log(res)
+					that.getListingData();
+					that.getListoverData();
+					uni.hideLoading()
+				}); 
 			},
 			delLinePro(item){
 				let that = this ;

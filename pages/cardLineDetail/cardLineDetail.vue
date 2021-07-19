@@ -6,23 +6,27 @@
         </cu-custom>
         <fuled-user-intro :info="item" v-on:onDefClick="onSubscibe"></fuled-user-intro>
 		
-		<fuled-china-mobile-line-pro :title="proInfo.title" :info="item" v-on:onDefClick="saveProInfo">
-			<button v-if="item.status < 4 && user.userType == 1" class="cu-btn bg-gradual-blue shadow-blur round">更新项目信息</button>
+		<fuled-china-mobile-line-pro   :title="proInfo.title" :info="item" v-on:onDefClick="saveProInfo">
+			<button v-if="(item.status == 0 || item.status == 1) && user.userType == 2" class="cu-btn bg-gradual-blue shadow-blur round">更新项目信息</button>
 		</fuled-china-mobile-line-pro>
 		
 		<fuled-china-mobile-line-constr-info :title="sgInfo.title" :info="item" v-on:onDefClick="saveConstrInfo">
-			<button v-if="item.status < 5 && user.userType == 2" class="cu-btn bg-gradual-blue shadow-blur round">更新施工信息</button>
+			<button v-if="item.status == 2 && user.userType == 3" class="cu-btn bg-gradual-blue shadow-blur round">更新施工信息</button>
 		</fuled-china-mobile-line-constr-info>
+		
+		 <fuled-china-mobile-line-pro-v2   :title="'项目确认信息'" :info="item" v-on:onDefClick="saveProInfo">
+		 	<button v-if="item.status == 3 && user.userType == 2" class="cu-btn bg-gradual-blue shadow-blur round">更新项目信息</button>
+		 </fuled-china-mobile-line-pro-v2>
 		 
-		<fuled-china-mobile-line :title="pjInfo.title" :domType="2" :info="item" v-on:onDefClick="saveappraisalInfo">
-			<button v-if="pjInfo.slot" class="cu-btn bg-gradual-blue shadow-blur round">保存</button>
+		<fuled-china-mobile-line v-if="user.userType == -1" :title="tsInfo.title" :domType="2" :info="item" v-on:onDefClick="savecomplaintInfo">
+			<button v-if="tsInfo.slot" class="cu-btn bg-gradual-blue shadow-blur round">保存</button>
 		</fuled-china-mobile-line>
 		
-		<fuled-china-mobile-line   :domType="3" :title="tsInfo.title" :info="item" v-on:onDefClick="savecomplaintInfo"> 
+		<!-- <fuled-china-mobile-line   :domType="3" :title="tsInfo.title" :info="item" v-on:onDefClick="savecomplaintInfo"> 
 			<button v-if="tsInfo.slot" class="cu-btn bg-gradual-blue shadow-blur round">提交</button>
-		</fuled-china-mobile-line>
+		</fuled-china-mobile-line> -->
 		
-		<fuled-china-mobile-line v-if="user.userType == -1"   :domType="4" :title="'投诉电话'" :info="item" >
+		<fuled-china-mobile-line    :domType="4" :title="'客户电话'" :info="item" >
 		</fuled-china-mobile-line>
     </view>
 </template>
@@ -73,17 +77,14 @@
 					uni.navigateTo({
 						url:'./line-pro-info/line-pro-info?data='+JSON.stringify(this.item.proInfo.contractInfo)
 					});
-				}else if(this.item.status == 1){//去设计院勘察
-					uni.navigateTo({
-						url:'./line-pro-info/line-pro-info?data='+JSON.stringify(this.item.proInfo.designInfo)
-					});
-				}else if(this.item.status == 2){//去方案审批
-					uni.navigateTo({
-						url:'./line-pro-info/line-pro-info?data='+JSON.stringify(this.item.proInfo.programlInfo)
-					});
-				}else if(this.item.status == 3){//去分配施工队
+				}else if(this.item.status == 1){//去分配施工队
 					uni.navigateTo({
 						url:'./line-pro-constr-info/line-pro-constr-info?data='+JSON.stringify(this.item.proInfo.teamInfo)
+					});
+				}
+				else if(this.item.status == 3){//去确认信息
+					uni.navigateTo({
+						url:'./line-pro-info/line-pro-info?data='+JSON.stringify(this.item.proInfo.conformInfo)
 					});
 				}
 			},
@@ -99,27 +100,19 @@
 						uni.hideLoading()
 					});
 				}else if(this.item.status == 1){
-					this.item.proInfo['designInfo'] = info ;
+					this.item.proInfo['teamInfo'] = info ; 
 					dbPro.doc(this.item._id).update({
+						implementId:info.implementId,
 						status:2,
 						proInfo:this.item.proInfo
 					}).then(res=>{
 						this.item.status = 2;
-						uni.hideLoading()
-					});
-				}else if(this.item.status == 2){
-					this.item.proInfo['programlInfo'] = info ;
-					dbPro.doc(this.item._id).update({
-						status:3,
-						proInfo:this.item.proInfo
-					}).then(res=>{
-						this.item.status = 3;
+						this.loadItemData();
 						uni.hideLoading()
 					});
 				}else if(this.item.status == 3){
-					this.item.proInfo['teamInfo'] = info ; 
+					this.item.proInfo['conformInfo'] = info ; 
 					dbPro.doc(this.item._id).update({
-						implementId:info.implementId,
 						status:4,
 						proInfo:this.item.proInfo
 					}).then(res=>{
@@ -145,14 +138,16 @@
 				});
 			},
 			setData2ConstrInfo(info){
+				let that = this;
 				let dbPro = db.collection("line-app-pro")
 				this.item.constrInfo.push(info) ; 
 				dbPro.doc(this.item._id).update({
 					implementId:info.implementId,
-					status:info.constrStatus == '2'?5:4,
-					constrInfo:this.item.constrInfo
+					status:info.constrStatus == '2'?3:2,
+					constrInfo:this.item.constrInfo,
+					okDate:info.constrStatus == '2'?that.$time.getFormatDate():"",
 				}).then(res=>{
-					this.item.status = info.constrStatus == '2'?5:4;
+					this.item.status = info.constrStatus == '2'?3:2;
 					uni.hideLoading()
 				});
 			},
@@ -169,27 +164,82 @@
 				this.pjInfo.slot = false ;
 			},
 			onSubscibe(type) {
-			    if(type == 1){
-					this.sgInfo.slot = true ;
-				}
-				if(type == 2){
-					this.pjInfo.slot = true ;
-				}
-				if(type == 3){
-					this.tsInfo.slot = true ;
-				}
+				this.tsInfo.slot = true ;
 			},
-			savecomplaintInfo(info){
-				info.complaintInfo['issubmit']=1;
+			savecomplaintInfo(info){ 
+				info.appraisalInfo['issubmit']=1;
 				uni.showLoading({mask: false});
 				let dbPro = db.collection("line-app-pro")
 				dbPro.doc(this.item._id).update({
-					complaintInfo:info.complaintInfo
+					appraisalInfo:info.appraisalInfo
 				}).then(res=>{
 					uni.hideLoading()
 				});
-				this.item.complaintInfo = info.complaintInfo ;
-				this.tsInfo.slot = false ;
+				this.item.appraisalInfo = info.appraisalInfo ;
+				this.tsInfo.slot = false ; 
+			},
+			loadItemData(){
+				let _this = this;
+				let condition = {};
+				if(this.user.userType == '2'){
+					condition = {
+						creator:this.user.loginName,
+						_id:_this.item._id
+					}
+				}else if(this.user.userType == '0'){
+					condition = {
+						_id:_this.item._id,
+					}
+				}else if(this.user.userType == '3'){
+					condition = {
+						implementId:this.user._id,
+						_id:_this.item._id
+					}
+				}else if(this.user.userType == '1'){
+					condition = {
+						areaId:this.user.areaId,
+						status:{$in:[0,1,2,3]}, 
+						_id:_this.item._id
+					}
+				}
+				const dbCmd = db.command
+				var $ = db.command.aggregate
+				let res = db.collection("line-app-pro").aggregate()
+				.match(condition)
+				.lookup({
+				  from: 'line-app-user',
+				  let: {
+				    pro_creator: '$creator'
+				  },
+				  pipeline: $.pipeline()
+				    .match(dbCmd.expr($.and([
+						$.eq(['$loginName', '$$pro_creator']),
+				    ])))
+				    .done(),
+				  as: 'jlList',
+				})
+				.lookup({
+				  from: 'line-app-user',
+				  let: {
+				    pro_implementId: '$implementId'
+				  },
+				  pipeline: $.pipeline()
+				    .match(dbCmd.expr($.and([
+				      $.eq(['$_id', '$$pro_implementId'])
+				    ])))
+				    .done(),
+				  as: 'sgList',
+				})
+				.end()
+				.then(res => {
+					//_this.cardList = res.result.data ;
+					console.log(res.result.data)
+					_this.item = res.result.data[0]
+				}).catch(err => {
+					console.error(err)
+				}).finally(() => {
+					uni.hideLoading()
+				})
 			}
         }
 	}

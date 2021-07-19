@@ -19,10 +19,16 @@
 			"format":"userPhone"
 		},
 		"userName":{
-			"title":"名称",
+			"title":"姓名",
 			"bsonType":"string",
 			"trim":"both",
 			"format":"userName"
+		},
+		"areaId":{
+			"title":"所属区域",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"areaId"
 		},
 		"password":{
 			"title":"密码",
@@ -35,6 +41,24 @@
 			"bsonType":"string",
 			"trim":"both",
 			"format":"userType"
+		},
+		"nickName":{
+			"title":"昵称",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"nickName"
+		},
+		"openid":{
+			"title":"微信OPENID",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"openid"
+		},
+		"avatarUrl":{
+			"title":"微信头像",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"avatarUrl"
 		},
 		"implementName":{
 			"title":"施工队名称",
@@ -53,6 +77,12 @@
 			"bsonType":"string",
 			"trim":"both",
 			"format":"loginName"
+		},
+		"creator":{
+			"title":"创建人ID",
+			"bsonType":"string",
+			"trim":"both",
+			"format":"creator"
 		}
 	}
 }
